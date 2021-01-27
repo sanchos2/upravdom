@@ -33,4 +33,4 @@ jobs:
         mypy .
     - name: Run test
       run: |
-        manage.py test
+        python manage.py test
