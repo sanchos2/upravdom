@@ -1,7 +1,7 @@
 from datetime import date
 from typing import List, Tuple
 
-from django.contrib.auth.models import User
+from django.conf import settings
 from django.db import models
 
 
@@ -59,7 +59,12 @@ class Placement(models.Model):
     total_space = models.FloatField('Общая площадь помещения', null=True, blank=True, default=0)
     living_space = models.FloatField('Жилая площадь помещения', null=True, blank=True, default=0)
 
-    owner = models.ManyToManyField(User, blank=True, related_name='apartments', verbose_name='Владелец(ы)')
+    owner = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        blank=True,
+        related_name='placements',
+        verbose_name='Владелец(ы)',
+    )
 
     def __str__(self):  # noqa: D105
         return str(self.number)
