@@ -1,5 +1,6 @@
 from datetime import date
 from typing import List, Tuple
+
 from django.contrib.auth.models import User
 from django.db import models
 
@@ -63,7 +64,7 @@ class Placement(models.Model):
     def __str__(self):  # noqa: D105
         return str(self.number)
 
-    levels_choices: List[Tuple[int, int]] = [(i, i) for i in range(1, 18)]  # noqa: WPS111, WPS432  TODO вынести в env var
+    levels_choices: List[Tuple[int, int]] = [(i, i) for i in range(1, 18)]  # noqa: WPS111, WPS432  TODO вынести в env
     level = models.IntegerField('Этаж', choices=levels_choices, null=True, blank=True)
     position = models.IntegerField('Позиция на этаже', null=True, blank=True)
 
@@ -83,7 +84,13 @@ class IMD(models.Model):
         related_name='imds',
         verbose_name='Номер квартиры',
     )
-    type_choices = [('ГВС', 'ГВС'), ('ХВС', 'ХВС'), ('ЭЛТ_Д', 'ЭЛТ_Д'), ('ЭЛТ_Н', 'ЭЛТ_Н'), ('ТПЛ', 'ТПЛ')]  # noqa: WPS221
+    type_choices = [
+        ('ГВС', 'ГВС'),
+        ('ХВС', 'ХВС'),
+        ('ЭЛТ_Д', 'ЭЛТ_Д'),
+        ('ЭЛТ_Н', 'ЭЛТ_Н'),
+        ('ТПЛ', 'ТПЛ'),
+    ]  # noqa: WPS221
     title = models.CharField('Наименование прибора учета', max_length=10, choices=type_choices)
     imd_number = models.CharField('Номер прибора учета', max_length=200)  # noqa: WPS432
     description = models.TextField('Описание прибора учета', blank=True)
