@@ -1,5 +1,5 @@
 from datetime import date
-
+from typing import List, Tuple
 from django.contrib.auth.models import User
 from django.db import models
 
@@ -53,8 +53,8 @@ class Placement(models.Model):
         verbose_name='Номер подъезда',
     )
     number = models.CharField('Номер помещения', max_length=20, blank=False, unique=True)  # noqa: WPS432
-    choices = [('Отдельная квартира', 'Отдельная квартира'), ('Нежилое помещение', 'Нежилое помещение')]
-    placement_type = models.CharField('Тип помещения', max_length=50, choices=choices)  # noqa: WPS432
+    placements_choices = [('Отдельная квартира', 'Отдельная квартира'), ('Нежилое помещение', 'Нежилое помещение')]
+    placement_type = models.CharField('Тип помещения', max_length=50, choices=placements_choices)  # noqa: WPS432
     total_space = models.FloatField('Общая площадь помещения', null=True, blank=True, default=0)
     living_space = models.FloatField('Жилая площадь помещения', null=True, blank=True, default=0)
 
@@ -63,8 +63,8 @@ class Placement(models.Model):
     def __str__(self):  # noqa: D105
         return str(self.number)
 
-    choices = [(i, i) for i in range(1, 18)]  # noqa: WPS111, WPS432  TODO вынести в env var
-    level = models.IntegerField('Этаж', choices=choices, null=True, blank=True)
+    levels_choices: List[Tuple[int, int]] = [(i, i) for i in range(1, 18)]  # noqa: WPS111, WPS432  TODO вынести в env var
+    level = models.IntegerField('Этаж', choices=levels_choices, null=True, blank=True)
     position = models.IntegerField('Позиция на этаже', null=True, blank=True)
 
     class Meta:  # noqa: D106, WPS306
@@ -83,8 +83,8 @@ class IMD(models.Model):
         related_name='imds',
         verbose_name='Номер квартиры',
     )
-    choices = [('ГВС', 'ГВС'), ('ХВС', 'ХВС'), ('ЭЛТ_Д', 'ЭЛТ_Д'), ('ЭЛТ_Н', 'ЭЛТ_Н'), ('ТПЛ', 'ТПЛ')]  # noqa: WPS221
-    title = models.CharField('Наименование прибора учета', max_length=10, choices=choices)
+    type_choices = [('ГВС', 'ГВС'), ('ХВС', 'ХВС'), ('ЭЛТ_Д', 'ЭЛТ_Д'), ('ЭЛТ_Н', 'ЭЛТ_Н'), ('ТПЛ', 'ТПЛ')]  # noqa: WPS221
+    title = models.CharField('Наименование прибора учета', max_length=10, choices=type_choices)
     imd_number = models.CharField('Номер прибора учета', max_length=200)  # noqa: WPS432
     description = models.TextField('Описание прибора учета', blank=True)
     initial_value = models.IntegerField('Начальное значение', default=0)
