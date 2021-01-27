@@ -1,12 +1,12 @@
 import csv
-from typing import Any, Optional, TextIO
+from typing import Any
 
 from django.core.management.base import BaseCommand, CommandError
 
 from datastorage.models import Entrance, Placement
 
 
-def create_placement(file: TextIO) -> None:  # noqa: WPS110
+def create_placement(file) -> None:  # noqa: WPS110
     """Загружает из csv файла данные по помещению."""
     with open(file, 'r', encoding='utf-8') as placements:
         fields = ['placement_type', 'entrance', 'number', 'total_space', 'living_space']
@@ -28,7 +28,7 @@ class Command(BaseCommand):  # noqa: WPS: D101
     def add_arguments(self, parser):  # noqa: D102
         parser.add_argument('file', nargs='+', type=str)
 
-    def handle(self, *args: Any, **options: Any) -> Optional[str]:  # noqa: WPS110
+    def handle(self, *args: Any, **options: Any) -> None:  # noqa: WPS110
         """Обработчик."""
         for file in options['file']:  # noqa: WPS110
             try:
