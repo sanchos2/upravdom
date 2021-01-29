@@ -75,7 +75,7 @@ class Placement(models.Model):
 
     class Meta:  # noqa: D106, WPS306
 
-        ordering = ['number', 'total_space', 'placement_type']
+        ordering = ['placement_type', 'number', 'total_space']
         verbose_name = 'Помещение'
         verbose_name_plural = 'Помещения'
 
