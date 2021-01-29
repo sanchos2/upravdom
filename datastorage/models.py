@@ -132,3 +132,50 @@ class IMDValue(models.Model):
 
         verbose_name = 'Показание ИПУ'
         verbose_name_plural = 'Показания ИПУ'
+
+
+class GHM(models.Model):
+    """Общедомовые приборы учета (ОДПУ)."""
+
+    placement = models.ForeignKey(
+        House,
+        on_delete=models.CASCADE,   # TODO after test, setmode PROTECT
+        related_name='ghms',
+        verbose_name='Номер дома',
+    )
+    title = models.CharField('Наименование прибора учета', max_length=150)  # noqa: WPS432
+    ghm_number = models.CharField('Номер прибора учета', max_length=200)  # noqa: WPS432
+    description = models.TextField('Описание прибора учета', blank=True)
+    initial_value = models.IntegerField('Начальное значение', default=0)
+    created_at = models.DateTimeField('Дата ввода в эксплуатацию', auto_now_add=True)
+    is_active = models.BooleanField('К учету', default=True)
+
+    def __str__(self):  # noqa: D105
+        return f'{self.title}'
+
+    class Meta:  # noqa: D106, WPS306
+
+        ordering = ['title']
+        verbose_name = 'ОДПУ'
+        verbose_name_plural = 'ОДПУ'
+
+
+class GHMValue(models.Model):
+    """Данные измерительного прибора на день учета."""
+
+    imd = models.ForeignKey(
+        GHM,
+        related_name='ghmvalues',
+        on_delete=models.CASCADE,   # TODO after test, setmode PROTECT
+        verbose_name='Наименование прибора учета',
+    )
+    check_date = models.DateField('Дата снятия показания', default=date.today)
+    check_value = models.FloatField('Текущее показание')
+
+    def __str__(self):  # noqa: D105
+        return f'{self.imd} {self.check_date} {self.check_value}'
+
+    class Meta:  # noqa: D106, WPS306
+
+        verbose_name = 'Показание ОДПУ'
+        verbose_name_plural = 'Показания ОДПУ'
