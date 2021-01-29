@@ -1,0 +1,11 @@
+venv
+.idea
+.mypy_cach
+.github
+db.sqlite3
+temp
+setup.cfg
+.env*
+README.md
+Dockerfile
+requirements.txt
