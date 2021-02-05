@@ -133,8 +133,10 @@ dmypy.json
 
 venv/
 media/
-.env
+.env*
 media/
 db.sqlite3
 temp/
-Dockerfile
+nginx/
+entrypoint*
+Docker*
