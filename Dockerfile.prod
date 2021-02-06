@@ -31,8 +31,8 @@ RUN apk update && apk add libpq
 COPY --from=builder /usr/src/app/wheels /wheels
 COPY --from=builder /usr/src/app/requirements-prod.txt .
 RUN pip install --no-cache /wheels/*
-COPY ./entrypoint.prod.sh $APP_HOME
+# COPY ./entrypoint.prod.sh $APP_HOME
 COPY . $APP_HOME
 RUN chown -R app:app $APP_HOME
 USER app
-#ENTRYPOINT ["/home/app/web/entrypoint.prod.sh"]
+# ENTRYPOINT ["/home/app/web/entrypoint.prod.sh"]
