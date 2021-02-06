@@ -139,4 +139,5 @@ db.sqlite3
 temp/
 nginx/
 entrypoint*
-Docker*
+docker-compose*
+Dockerfile
