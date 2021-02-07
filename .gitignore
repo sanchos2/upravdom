@@ -140,4 +140,4 @@ temp/
 nginx/
 entrypoint*
 docker-compose.yaml
-Dockerfile
+Dockerfile.start

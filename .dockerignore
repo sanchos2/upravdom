@@ -7,7 +7,7 @@ temp
 setup.cfg
 .env*
 README.md
-Dockerfile
+Dockerfile.start
 Dockerfile.prod
 requirements-dev.txt
 docker-compose.prod.yaml
