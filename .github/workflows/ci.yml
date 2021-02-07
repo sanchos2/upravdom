@@ -92,7 +92,7 @@ jobs:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
         run:
           scp  -o StrictHostKeyChecking=no -P ${{ secrets.VPS_PORT }} -r ./.env ./docker-compose.prod.yaml ${{ secrets.VPS_USER }}@${{ secrets.VPS_NAME }}:${{ secrets.APP_DIR }}
-          ssh -o StrictHostKeyChecking=no -P ${{ secrets.VPS_PORT }}  ${{ secrets.VPS_USER }}@${{ secrets.VPS_NAME }} << 'ENDSSH'
+          ssh -o StrictHostKeyChecking=no -p ${{ secrets.VPS_PORT }}  ${{ secrets.VPS_USER }}@${{ secrets.VPS_NAME }} << 'ENDSSH'
             cd $APP_DIR
             source .env
             docker pull $WEB_IMAGE
