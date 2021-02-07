@@ -1,0 +1,35 @@
+version: '3.7'
+
+services:
+  web:
+    image: sanchos2/upravdom:latest
+    command: gunicorn upravdom.wsgi:application --bind 0.0.0.0:8000 --workers 3
+    expose:
+      - 8000
+    volumes:
+      - static_volume:/home/app/web/staticfiles
+    env_file:
+      - ./.env.prod
+    depends_on:
+      - db
+
+  db:
+    image: postgres:12.0-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - ./.env.prod.db
+
+  nginx:
+    build:
+      context: ./nginx
+    volumes:
+      - static_volume:/home/app/web/staticfiles
+    ports:
+      - 80:80
+    depends_on:
+      - web
+
+volumes:
+  postgres_data:
+  static_volume:

@@ -1,6 +1,6 @@
 venv
 .idea
-.mypy_cach
+.mypy_cache
 .github
 db.sqlite3
 temp
@@ -8,4 +8,6 @@ setup.cfg
 .env*
 README.md
 Dockerfile
-requirements.txt
+Dockerfile.prod
+requirements-dev.txt
+docker-compose.prod.yaml
