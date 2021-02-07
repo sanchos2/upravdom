@@ -33,7 +33,7 @@ jobs:
         run: |
           python manage.py test
 
-  package-job:
+  build-job:
     runs-on: ubuntu-latest
     needs: [health-check-job]
     steps:
@@ -71,12 +71,22 @@ jobs:
   deploy-job:
     name: Deploy to VPS
     runs-on: ubuntu-latest
-    needs: [package-job]
+    needs: [build-job]
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
       - name: Add environment variables to .env
         run: |
+          echo DEBUG=False >> .env
+          echo SECRET_KEY=${{ secrets.SECRET_KEY }} >> .env
+          echo ALLOWED_HOSTS=${{ secrets.ALLOWED_HOSTS }} >> .env
+          echo DB_ENGINE=django.db.backends.postgresql >> .env
+          echo DB_HOST=db >> .env
+          echo DB_PORT=5432 >> .env
+          echo DB_NAME=${{ secrets.DB_NAME }} >> .env
+          echo DB_USER=${{ secrets.DB_USER }} >> .env
+          echo DB_PASSWORD=${{ secrets.DB_PASSWORD }} >> .env
+          echo DATABASE=postgres >> .env
           echo WEB_IMAGE=sanchos2/upravdom:latest >> .env
           echo APP_DIR=${{ secrets.APP_DIR }} >> .env
           echo DOCKER_HUB_USERNAME=${{ secrets.DOCKER_HUB_USERNAME }} >> .env
