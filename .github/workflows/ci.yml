@@ -75,6 +75,10 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
+      - name: Add environment variables to .env
+        run: |
+          echo WEB_IMAGE=sanchos2/upravdom:latest >> .env
+          echo APP_DIR=${{ secrets.APP_DIR }} >> .env
       - name: Add the private SSH key to the ssh-agent
         env:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
@@ -87,4 +91,10 @@ jobs:
         env:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
         run:
-          scp  -o StrictHostKeyChecking=no -P ${{ secrets.VPS_PORT }} -r ./docker-compose.prod.yaml ${{ secrets.VPS_USER }}@${{ secrets.VPS_NAME }}:${{ secrets.APP_DIR }}
+          scp  -o StrictHostKeyChecking=no -P ${{ secrets.VPS_PORT }} -r ./.env ./docker-compose.prod.yaml ${{ secrets.VPS_USER }}@${{ secrets.VPS_NAME }}:${{ secrets.APP_DIR }}
+          ssh -o StrictHostKeyChecking=no -P ${{ secrets.VPS_PORT }}  ${{ secrets.VPS_USER }}@${{ secrets.VPS_NAME }} << 'ENDSSH'
+            cd $APP_DIR
+            source .env
+            docker pull $WEB_IMAGE
+            docker-compose -f docker-compose.prod.yaml up -d
+          ENDSSH
