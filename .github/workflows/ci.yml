@@ -75,6 +75,16 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
+      - name: Add the private SSH key to the ssh-agent
+          env:
+            SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+          run: |
+            mkdir -p ~/.ssh
+            ssh-agent -a $SSH_AUTH_SOCK > /dev/null
+            ssh-keyscan github.com >> ~/.ssh/known_hosts
+            ssh-add - <<< "${{ secrets.PRIVATE_KEY }}"
       - name: Build and deploy images on VPS
+        env:
+          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
         run:
           scp  -o StrictHostKeyChecking=no -P ${{ secrets.VPS_PORT }} -r ./docker-compose.prod.yaml ${{ secrets.VPS_USER }}@${{ secrets.VPS_NAME }}:${{ secrets.APP_DIR }}
