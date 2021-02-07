@@ -79,6 +79,8 @@ jobs:
         run: |
           echo WEB_IMAGE=sanchos2/upravdom:latest >> .env
           echo APP_DIR=${{ secrets.APP_DIR }} >> .env
+          echo DOCKER_HUB_USERNAME=${{ secrets.DOCKER_HUB_USERNAME }}
+          echo DOCKER_HUB_ACCESS_TOKEN=${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
       - name: Add the private SSH key to the ssh-agent
         env:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
@@ -95,6 +97,7 @@ jobs:
           ssh -o StrictHostKeyChecking=no -p ${{ secrets.VPS_PORT }}  ${{ secrets.VPS_USER }}@${{ secrets.VPS_NAME }} << 'ENDSSH'
             cd $HOME/upravdom
             source .env
+            docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_ACCESS_TOKEN
             docker pull $WEB_IMAGE
             docker-compose -f docker-compose.prod.yaml up -d
           ENDSSH
