@@ -79,8 +79,8 @@ jobs:
         run: |
           echo WEB_IMAGE=sanchos2/upravdom:latest >> .env
           echo APP_DIR=${{ secrets.APP_DIR }} >> .env
-          echo DOCKER_HUB_USERNAME=${{ secrets.DOCKER_HUB_USERNAME }}
-          echo DOCKER_HUB_ACCESS_TOKEN=${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+          echo DOCKER_HUB_USERNAME=${{ secrets.DOCKER_HUB_USERNAME }} >> .env
+          echo DOCKER_HUB_ACCESS_TOKEN=${{ secrets.DOCKER_HUB_ACCESS_TOKEN }} >> .env
       - name: Add the private SSH key to the ssh-agent
         env:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
