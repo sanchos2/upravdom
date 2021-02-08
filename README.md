@@ -1,6 +1,6 @@
 ## Описание
 
-# UPRAVDOM - проект для контроля начислений платежных документов в сфере жкх.
+# UPRAVDOM - проект для контроля начислений платежных документов в сфере ЖКХ.
 
 [![wemake-python-styleguide](https://img.shields.io/badge/style-wemake-000000.svg)](https://github.com/wemake-services/wemake-python-styleguide)
 ![Django application](https://github.com/sanchos2/upravdom/workflows/Django%20application/badge.svg?branch=master)
