@@ -11,3 +11,4 @@ Dockerfile.start
 Dockerfile.prod
 requirements-dev.txt
 docker-compose.prod.yaml
+Dockerfile

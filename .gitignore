@@ -133,11 +133,11 @@ dmypy.json
 
 venv/
 media/
-.env*
+.env
 media/
 db.sqlite3
 temp/
 nginx/
 entrypoint*
 docker-compose.yaml
-Dockerfile.start
+temp/Dockerfile.start
