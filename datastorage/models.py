@@ -12,13 +12,13 @@ class House(models.Model):
     title = models.CharField('Название дома', max_length=200)  # noqa: WPS432
     energy_efficiency = models.CharField('Энергоэфективность дома', choices=choices, max_length=2)
 
-    def __str__(self):  # noqa: D105
-        return self.title
-
     class Meta:  # noqa: D106, WPS306
 
         verbose_name = 'Дом'
         verbose_name_plural = 'Дома'
+
+    def __str__(self):  # noqa: D105
+        return self.title
 
 
 class Entrance(models.Model):
@@ -34,19 +34,20 @@ class Entrance(models.Model):
     placement_on_level = models.IntegerField('Количество квартир на этаже', null=False)
     total_level = models.IntegerField('Количество этажей в подъезде', null=False)
 
-    def __str__(self):  # noqa: D105
-        return f'Подъезд №{self.number}'
-
     class Meta:  # noqa: D106, WPS306
 
         ordering = ['number']
         verbose_name = 'Подъезд'
         verbose_name_plural = 'Подъезды'
 
+    def __str__(self):  # noqa: D105
+        return f'Подъезд №{self.number}'
+
 
 class Placement(models.Model):
     """Помещения."""
 
+    levels_choices: List[Tuple[int, int]] = [(i, i) for i in range(1, 18)]  # noqa: WPS111, WPS432  TODO вынести в env
     entrance = models.ForeignKey(
         Entrance,
         on_delete=models.CASCADE,   # TODO after test, setmode PROTECT
@@ -58,18 +59,12 @@ class Placement(models.Model):
     placement_type = models.CharField('Тип помещения', max_length=50, choices=placements_choices)  # noqa: WPS432
     total_space = models.FloatField('Общая площадь помещения', null=True, blank=True, default=0)
     living_space = models.FloatField('Жилая площадь помещения', null=True, blank=True, default=0)
-
     owner = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
         blank=True,
         related_name='placements',
         verbose_name='Владелец(ы)',
     )
-
-    def __str__(self):  # noqa: D105
-        return str(self.number)
-
-    levels_choices: List[Tuple[int, int]] = [(i, i) for i in range(1, 18)]  # noqa: WPS111, WPS432  TODO вынести в env
     level = models.IntegerField('Этаж', choices=levels_choices, null=True, blank=True)
     position = models.IntegerField('Позиция на этаже', null=True, blank=True)
 
@@ -79,16 +74,13 @@ class Placement(models.Model):
         verbose_name = 'Помещение'
         verbose_name_plural = 'Помещения'
 
+    def __str__(self):  # noqa: D105
+        return str(self.number)
+
 
 class IMD(models.Model):
     """Индивидуальные приборы учета (ИПУ)."""
 
-    placement = models.ForeignKey(
-        Placement,
-        on_delete=models.CASCADE,   # TODO after test, setmode PROTECT
-        related_name='imds',
-        verbose_name='Номер квартиры',
-    )
     type_choices = [
         ('ГВС', 'ГВС'),
         ('ХВС', 'ХВС'),
@@ -96,6 +88,12 @@ class IMD(models.Model):
         ('ЭЛТ_Н', 'ЭЛТ_Н'),
         ('ТПЛ', 'ТПЛ'),
     ]  # noqa: WPS221
+    placement = models.ForeignKey(
+        Placement,
+        on_delete=models.CASCADE,   # TODO after test, setmode PROTECT
+        related_name='imds',
+        verbose_name='Номер квартиры',
+    )
     title = models.CharField('Наименование прибора учета', max_length=10, choices=type_choices)
     imd_number = models.CharField('Номер прибора учета', max_length=200)  # noqa: WPS432
     description = models.TextField('Описание прибора учета', blank=True)
@@ -103,14 +101,14 @@ class IMD(models.Model):
     created_at = models.DateTimeField('Дата ввода в эксплуатацию', auto_now_add=True)
     is_active = models.BooleanField('К учету', default=True)
 
-    def __str__(self):  # noqa: D105
-        return f'{self.title}'
-
     class Meta:  # noqa: D106, WPS306
 
         ordering = ['title']
         verbose_name = 'ИПУ'
         verbose_name_plural = 'ИПУ'
+
+    def __str__(self):  # noqa: D105
+        return f'{self.title}'
 
 
 class IMDValue(models.Model):
@@ -125,13 +123,13 @@ class IMDValue(models.Model):
     check_date = models.DateField('Дата снятия показания', default=date.today)
     check_value = models.FloatField('Текущее показание')
 
-    def __str__(self):  # noqa: D105
-        return f'{self.imd} {self.check_date} {self.check_value}'
-
     class Meta:  # noqa: D106, WPS306
 
         verbose_name = 'Показание ИПУ'
         verbose_name_plural = 'Показания ИПУ'
+
+    def __str__(self):  # noqa: D105
+        return f'{self.imd} {self.check_date} {self.check_value}'
 
 
 class GHM(models.Model):
@@ -150,14 +148,14 @@ class GHM(models.Model):
     created_at = models.DateTimeField('Дата ввода в эксплуатацию', auto_now_add=True)
     is_active = models.BooleanField('К учету', default=True)
 
-    def __str__(self):  # noqa: D105
-        return f'{self.title}'
-
     class Meta:  # noqa: D106, WPS306
 
         ordering = ['title']
         verbose_name = 'ОДПУ'
         verbose_name_plural = 'ОДПУ'
+
+    def __str__(self):  # noqa: D105
+        return f'{self.title}'
 
 
 class GHMValue(models.Model):
@@ -172,10 +170,10 @@ class GHMValue(models.Model):
     check_date = models.DateField('Дата снятия показания', default=date.today)
     check_value = models.FloatField('Текущее показание')
 
-    def __str__(self):  # noqa: D105
-        return f'{self.imd} {self.check_date} {self.check_value}'
-
     class Meta:  # noqa: D106, WPS306
 
         verbose_name = 'Показание ОДПУ'
         verbose_name_plural = 'Показания ОДПУ'
+
+    def __str__(self):  # noqa: D105
+        return f'{self.imd} {self.check_date} {self.check_value}'
