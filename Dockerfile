@@ -2,7 +2,7 @@
 # BUILDER #
 ###########
 
-FROM python:3.9.1-alpine as builder
+FROM python:3.10.0b2-alpine as builder
 WORKDIR /usr/src/app
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
@@ -18,7 +18,7 @@ RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r requir
 # FINAL #
 #########
 
-FROM python:3.9.1-alpine
+FROM python:3.10.0b2-alpine
 RUN mkdir -p /home/app
 RUN addgroup -S app && adduser -S app -G app
 ENV HOME=/home/app
